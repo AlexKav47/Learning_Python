@@ -1,6 +1,7 @@
 import os
 import re
-
+import qrcode
+from qrcode.constants import ERROR_CORRECT_M
 
 def make_filename_safe(text: str) -> str:
     safe = re.sub(r'[^A-Za-z0-9_-]+', '_', text).strip('_')
@@ -10,7 +11,7 @@ def make_filename_safe(text: str) -> str:
 def generate_qr_code(data: str, filename: str = 'qr_code.png') -> str:
     qr = qrcode.QRCode(
         version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_M,
+        error_correction=ERROR_CORRECT_M,
         box_size=10,
         border=4,
     )
@@ -18,7 +19,9 @@ def generate_qr_code(data: str, filename: str = 'qr_code.png') -> str:
     qr.make(fit=True)
 
     image = qr.make_image(fill_color='black', back_color='white')
-    image.save(filename)
+    with open(filename, "wb") as file:
+        
+        image.save(file)
     return filename
 
 
